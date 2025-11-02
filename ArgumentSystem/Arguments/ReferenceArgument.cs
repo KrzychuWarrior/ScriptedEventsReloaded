@@ -3,19 +3,19 @@ using SER.ArgumentSystem.BaseArguments;
 using SER.Helpers.Extensions;
 using SER.Helpers.ResultSystem;
 using SER.TokenSystem.Tokens;
-using SER.TokenSystem.Tokens.Interfaces;
 using SER.ValueSystem;
 
 namespace SER.ArgumentSystem.Arguments;
 
 public class ReferenceArgument<TValue>(string name) : Argument(name)
 {
-    public override string InputDescription => $"A reference to {typeof(TValue).GetAccurateName()} object.";
+    private static readonly string ValidInput = $"a reference to {typeof(TValue).AccurateName} object.";
+    public override string InputDescription => ValidInput;
 
     [UsedImplicitly]
     public DynamicTryGet<TValue> GetConvertSolution(BaseToken token)
     {
-        if (token is not IValueToken valToken || !valToken.CanReturn<ReferenceValue>(out var get))
+        if (!token.CanReturn<ReferenceValue>(out var get))
         {
             return $"Value '{token.RawRep}' does not represent a valid reference.";
         }
@@ -25,11 +25,11 @@ public class ReferenceArgument<TValue>(string name) : Argument(name)
 
     public static TryGet<TValue> TryParse(ReferenceValue value)
     {
-        if (value.Value is not TValue correctValue)
+        if (value.Value is TValue tValue)
         {
-            return $"The {value} reference is not compatible with {typeof(TValue).GetAccurateName()}.";
+            return tValue;
         }
-
-        return correctValue;
+        
+        return $"The {value} reference is not {ValidInput}";
     }
 }

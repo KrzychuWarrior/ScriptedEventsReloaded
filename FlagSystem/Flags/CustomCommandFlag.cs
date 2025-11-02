@@ -205,7 +205,6 @@ public class CustomCommandFlag : Flag
             return error;
         }
 
-
         for (var index = 0; index < requestingCommand.Usage.Length; index++)
         {
             var argVariable = requestingCommand.Usage[index];

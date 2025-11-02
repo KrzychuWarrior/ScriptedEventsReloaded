@@ -371,8 +371,8 @@ public class HelpCommand : ICommand
             If the round has started, server will invoke an event (signal) called RoundStarted.
             You can use this functionality to run your scripts when a certain event happens.
             
-            By putting `!-- Event RoundStarted` at the top of your script, you will run your script when the round starts.
-            You can put something different there, e.g. `!-- Event Death`, which will run when someone has died.
+            By putting `!-- OnEvent RoundStarted` at the top of your script, you will run your script when the round starts.
+            You can put something different there, e.g. `!-- OnEvent Death`, which will run when someone has died.
             
             Some events have additional information attached to them in a form of variables.
             If you wish to know what variables are available for a given event, just use 'serhelp <eventName>'!

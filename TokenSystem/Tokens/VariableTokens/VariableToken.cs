@@ -14,6 +14,7 @@ public abstract class VariableToken : BaseToken, IContextableToken
 {
     public abstract char Prefix { get; }
     public abstract string Name { get; protected set; }
+    public abstract Type VariableType { get; }
     
     public TryGet<Variable> TryGetVariable()
     {
@@ -28,7 +29,9 @@ public abstract class VariableToken<TVariable, TValue> : VariableToken, IValueTo
     where TValue : Value
 {
     public override string Name { get; protected set; } = null!;
-    
+
+    public override Type VariableType => typeof(TVariable);
+
     public new TryGet<TVariable> TryGetVariable()
     {
         return Script.TryGetVariable<TVariable>(this);
@@ -57,6 +60,6 @@ public abstract class VariableToken<TVariable, TValue> : VariableToken, IValueTo
         return TryGetVariable().OnSuccess(Value (variable) => variable.Value);
     }
 
-    public Type[]? PossibleValueTypes => [typeof(TValue)];
+    public Type[] PossibleValueTypes => [typeof(TValue)];
     public bool IsConstant => false;
 }

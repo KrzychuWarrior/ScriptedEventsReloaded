@@ -88,7 +88,7 @@ public class CustomCommandFlag : Flag
         Server      = 1 << 2
     }
 
-    public override void FinalizeFlag()
+    public override void OnParsingComplete()
     {
         if (ScriptCommands.ContainsKey(Command))
         {

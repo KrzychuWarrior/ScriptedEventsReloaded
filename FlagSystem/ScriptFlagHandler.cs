@@ -5,6 +5,7 @@ using SER.Helpers;
 using SER.Helpers.Exceptions;
 using SER.Helpers.Extensions;
 using SER.Helpers.ResultSystem;
+using SER.ScriptSystem;
 using SER.TokenSystem.Structures;
 using SER.TokenSystem.Tokens;
 using EventHandler = SER.EventSystem.EventHandler;
@@ -52,34 +53,52 @@ public static class ScriptFlagHandler
             }
         }
         
-        _currentFlag?.FinalizeFlag();
+        _currentFlag?.OnParsingComplete();
         _currentFlag = null;
+    }
+
+    public static Result DoFlagsApproveExecution(Script scr)
+    {
+        if (!ScriptsFlags.TryGetValue(scr.Name, out var scriptFlags))
+        {
+            return true;
+        }
+
+        foreach (var flag in scriptFlags)
+        {
+            if (flag.OnScriptRunning(scr).HasErrored(out var error))
+            {
+                return error;
+            }
+        }
+
+        return true;
     }
 
     private static void HandleFlagArgument(string argName, string[] arguments, string scriptName)
     {
         if (_currentFlag is null)
         {
-            Log.Error(scriptName, "You cannot provide flag arguments if there is no valid SER flag above.");
+            Log.Error(scriptName, $"Tried to add argument '{argName}', but there is no valid flag above.");
             return;
         }
 
         var arg = _currentFlag.Arguments.FirstOrDefault(arg => arg.Name == argName);
         if (string.IsNullOrEmpty(arg.Name))
         {
-            Log.Error(scriptName, $"Flag {_currentFlag.Name} does not accept the '{argName}' argument.");
+            Log.Error(scriptName, $"Flag {_currentFlag.Name} does not accept a '{argName}' argument.");
             return;
         }
 
         if (arg.AddArgument(arguments).HasErrored(out var error))
         {
-            Log.Error(scriptName, $"Error while handling flag argument '{argName}' in flag '{_currentFlag.Name}': {error}");
+            Log.Error(scriptName, $"Error while handling flag argument '{argName}' for '{_currentFlag.Name}': {error}");
         }
     }
 
     private static void HandleFlag(string name, string[] arguments, string scriptName)
     {
-        _currentFlag?.FinalizeFlag();
+        _currentFlag?.OnParsingComplete();
         Result rs = $"Flag '{name}' failed when parsing.";
         
         if (Flag.TryGet(name, scriptName).HasErrored(out var getErr, out var flag))

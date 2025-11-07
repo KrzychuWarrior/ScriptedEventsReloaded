@@ -5,6 +5,7 @@ using System.Reflection;
 using LabApi.Features.Console;
 using SER.Helpers.Extensions;
 using SER.Helpers.ResultSystem;
+using SER.ScriptSystem;
 
 namespace SER.FlagSystem.Structures;
 
@@ -27,11 +28,13 @@ public abstract class Flag
 
     public abstract Argument[] Arguments { get; }
 
-    public virtual void FinalizeFlag()
+    public virtual void OnParsingComplete()
     {
     }
 
     public abstract void Unbind();
+    
+    public virtual Result OnScriptRunning(Script scr) => true;
 
     protected string ScriptName { get; set; } = null!;
 

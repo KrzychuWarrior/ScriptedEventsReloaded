@@ -36,10 +36,6 @@ public class OnEventFlag : Flag
     );
     
     public override Argument[] Arguments => [];
-    
-    public override void FinalizeFlag()
-    {
-    }
 
     public override void Unbind()
     {

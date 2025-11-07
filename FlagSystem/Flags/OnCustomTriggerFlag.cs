@@ -37,10 +37,6 @@ public class OnCustomTriggerFlag : Flag
     
     public override Argument[] Arguments => [];
 
-    public override void FinalizeFlag()
-    {
-    }
-
     public override void Unbind()
     {
         if (ScriptsBoundToTrigger.TryGetValue(_trigger, out var list))

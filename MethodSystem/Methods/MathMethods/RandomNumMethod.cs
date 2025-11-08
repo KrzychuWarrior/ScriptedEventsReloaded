@@ -26,9 +26,6 @@ public class RandomNumMethod : ReturningMethod<NumberValue>, IAdditionalDescript
             new("int", "Returns an integer number"), 
             new("real", "Returns a real number")
         )
-        {
-            DefaultValue = "real"
-        }
     ];
 
     public override void Execute()

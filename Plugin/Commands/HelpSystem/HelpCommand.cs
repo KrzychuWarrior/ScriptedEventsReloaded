@@ -6,7 +6,7 @@ using System.Text;
 using CommandSystem;
 using SER.ContextSystem.BaseContexts;
 using SER.ContextSystem.Structures;
-using SER.FlagSystem.Structures;
+using SER.FlagSystem.Flags;
 using SER.Helpers.Exceptions;
 using SER.Helpers.Extensions;
 using SER.MethodSystem;
@@ -565,7 +565,7 @@ public class HelpCommand : ICommand
         for (var index = 0; index < method.ExpectedArguments.Length; index++)
         {
             var argument = method.ExpectedArguments[index];
-            var optionalArgPrefix = argument.IsOptional ? " optional" : "";
+            var optionalArgPrefix = argument.DefaultValue is null ? " optional" : "";
             sb.AppendLine($"({index + 1}){optionalArgPrefix} '{argument.Name}' argument");
 
             if (argument.Description is not null)
@@ -575,9 +575,9 @@ public class HelpCommand : ICommand
             
             sb.AppendLine($" - Expected value: {argument.InputDescription}");
 
-            if (argument.IsOptional)
+            if (argument.DefaultValue is {} defVal)
             {
-                sb.AppendLine($" - Default value: {argument.DefaultValue}");
+                sb.AppendLine($" - Default value: {defVal.StringRep ?? defVal.Value?.ToString() ?? "unknown"}");
             }
 
             if (argument.ConsumesRemainingValues)

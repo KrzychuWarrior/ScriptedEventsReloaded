@@ -16,6 +16,6 @@ public class AmountOfMethod : ReturningMethod<NumberValue>
 
     public override void Execute()
     {
-        ReturnValue = Args.GetPlayers("variable").Count;
+        ReturnValue = Args.GetPlayers("variable").Length;
     }
 }

@@ -13,7 +13,7 @@ public class KillMethod : SynchronousMethod
         new PlayersArgument("players"),
         new TextArgument("reason")
         {
-            DefaultValue = string.Empty,
+            DefaultValue = new(string.Empty, "empty"),
         }
     ];
     

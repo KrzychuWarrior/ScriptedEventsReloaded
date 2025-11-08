@@ -18,7 +18,7 @@ public class BlackoutMethod : SynchronousMethod
         new RoomsArgument("rooms"),
         new DurationArgument("duration")
         {
-            DefaultValue = TimeSpan.MaxValue
+            DefaultValue = new(TimeSpan.MaxValue, "infinite")
         }
     ];
     

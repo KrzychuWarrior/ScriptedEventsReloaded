@@ -15,7 +15,7 @@ public class GiveCandyMethod : SynchronousMethod
         new EnumArgument<CandyKindID>("candyType"),
         new IntArgument("amount", 1)
         {
-            DefaultValue = 1
+            DefaultValue = new(1, null)
         }
     ];
     

@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using SER.ArgumentSystem.Arguments;
 using SER.ArgumentSystem.BaseArguments;
 using SER.MethodSystem.BaseMethods;
@@ -22,7 +21,7 @@ public class SetGroupMethod : SynchronousMethod
     public override void Execute()
     {
         string group = Args.GetText("group");
-        List<Player> players = Args.GetPlayers("players");
+        var players = Args.GetPlayers("players");
         
         foreach (Player plr in players)
         {

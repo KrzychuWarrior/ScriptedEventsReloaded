@@ -20,27 +20,27 @@ public class SetAHPMethod : SynchronousMethod
         },
         new FloatArgument("limit", 0)
         {
-            DefaultValue = 75,
+            DefaultValue = new(75, null),
             Description = "The upper limit of AHP."
         },
         new FloatArgument("decay", 0)
         {
-            DefaultValue = 1.2,
+            DefaultValue = new(1.2, null),
             Description = "How much AHP is lost per second."
         },
         new FloatArgument("efficacy", 0, 1)
         {
-            DefaultValue = 0.7,
+            DefaultValue = new(0.7, "70%"),
             Description = "The percent of incoming damage absorbed by AHP."
         },
         new DurationArgument("sustain")
         {
-            DefaultValue = TimeSpan.Zero,
+            DefaultValue = new(TimeSpan.Zero, "instant (0 seconds)"),
             Description = "The amount of time before the AHP begins to decay."
         },
         new BoolArgument("isPersistent")
         {
-            DefaultValue = false,
+            DefaultValue = new(false, null),
             Description = "Whether or not the AHP process stays after AHP reaches 0."
         }
     ];

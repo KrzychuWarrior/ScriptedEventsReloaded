@@ -21,12 +21,12 @@ public class CassieMethod : SynchronousMethod
         new TextArgument("message"),
         new TextArgument("translation")
         {
-            DefaultValue = "",
+            DefaultValue = new("", "empty"),
         },
         new BoolArgument("should glitch")
         {
             Description = "If true, SER will add random glitch effects to the announcement.",
-            DefaultValue = false,
+            DefaultValue = new(false, null),
         }
     ];
     

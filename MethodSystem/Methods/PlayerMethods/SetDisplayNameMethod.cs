@@ -1,8 +1,6 @@
-﻿using LabApi.Features.Wrappers;
-using SER.ArgumentSystem.Arguments;
+﻿using SER.ArgumentSystem.Arguments;
 using SER.ArgumentSystem.BaseArguments;
 using SER.MethodSystem.BaseMethods;
-using System.Collections.Generic;
 
 namespace SER.MethodSystem.Methods.PlayerMethods;
 
@@ -21,8 +19,8 @@ public class SetDisplayNameMethod : SynchronousMethod
 
     public override void Execute()
     {
-        List<Player> players = Args.GetPlayers("players");
-        string displayName = Args.GetText("display name");
+        var players = Args.GetPlayers("players");
+        var displayName = Args.GetText("display name");
         
         players.ForEach(p => p.DisplayName = displayName);
     }

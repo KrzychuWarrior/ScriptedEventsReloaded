@@ -14,7 +14,7 @@ public class DamageMethod : SynchronousMethod
         new FloatArgument("amount", 0),
         new TextArgument("reason")
         {
-            DefaultValue = string.Empty
+            DefaultValue = new(string.Empty, "empty")
         }
     ];
     

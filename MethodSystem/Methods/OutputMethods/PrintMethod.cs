@@ -15,7 +15,7 @@ public class PrintMethod : SynchronousMethod
         new TextArgument("text"),
         new EnumArgument<ConsoleColor>("color")
         {
-            DefaultValue = ConsoleColor.Green
+            DefaultValue = new(ConsoleColor.Green, null)
         }
     ];
 

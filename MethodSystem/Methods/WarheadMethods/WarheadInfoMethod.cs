@@ -7,32 +7,33 @@ using SER.ValueSystem;
 using System;
 
 namespace SER.MethodSystem.Methods.WarheadMethods;
+
 public class WarheadInfoMethod : ReturningMethod
 {
-    public override string Description => "returns information about alpha warhead";
+    public override string Description => "Returns information about Alpha Warhead";
 
-    public override Type[] ReturnTypes => [typeof(BoolValue), typeof(NumberValue)];
+    public override Type[] ReturnTypes => [typeof(BoolValue), typeof(DurationValue)];
 
     public override Argument[] ExpectedArguments =>
     [
         new OptionsArgument("property",
-            "isOpen",
+            "isLocked",
             "isArmed",
-            "isStarted",
+            "hasStarted",
             "isDetonated",
             "duration"
-            )
+        )
     ];
 
     public override void Execute()
     {
         ReturnValue = Args.GetOption("property") switch
         {
+            "islocked" => new BoolValue(Warhead.IsLocked),
             "isarmed" => new BoolValue(Warhead.IsAuthorized),
-            "isopen" => new BoolValue(Warhead.IsLocked),
-            "isstarted" => new BoolValue(Warhead.IsDetonationInProgress),
+            "hasstarted" => new BoolValue(Warhead.IsDetonationInProgress),
             "isdetonated" => new BoolValue(Warhead.IsDetonated),
-            "duration" => new NumberValue((decimal)AlphaWarheadController.TimeUntilDetonation),
+            "duration" => new DurationValue(TimeSpan.FromSeconds(AlphaWarheadController.TimeUntilDetonation)),
             _ => throw new KrzysiuFuckedUpException()
         };
     }

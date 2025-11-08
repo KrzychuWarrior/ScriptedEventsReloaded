@@ -15,7 +15,7 @@ public class SetLightColorMethod : SynchronousMethod
         new ColorArgument("color"),
         new FloatArgument("intensity", 0)
         {
-            DefaultValue = 1f
+            DefaultValue = new(1f, "100%")
         }
     ];
     

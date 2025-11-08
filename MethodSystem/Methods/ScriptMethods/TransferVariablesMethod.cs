@@ -11,7 +11,7 @@ public class TransferVariablesMethod : SynchronousMethod
 
     public override Argument[] ExpectedArguments { get; } =
     [
-        new ScriptArgument("target script"),
+        new RunningScriptArgument("target script"),
         new VariableArgument("variables")
         {
             ConsumesRemainingValues = true,
@@ -20,7 +20,7 @@ public class TransferVariablesMethod : SynchronousMethod
 
     public override void Execute()
     {
-        var script = Args.GetScript("target script");
+        var script = Args.GetRunningScript("target script");
         var variables = Args.GetRemainingArguments<Variable, VariableArgument>("variables");
         
         script.AddVariables(variables);

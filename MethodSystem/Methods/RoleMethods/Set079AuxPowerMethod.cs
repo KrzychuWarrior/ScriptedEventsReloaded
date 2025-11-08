@@ -3,7 +3,6 @@ using PlayerRoles.PlayableScps.Scp079;
 using SER.ArgumentSystem.Arguments;
 using SER.ArgumentSystem.BaseArguments;
 using SER.MethodSystem.BaseMethods;
-using System.Collections.Generic;
 
 namespace SER.MethodSystem.Methods.RoleMethods;
 public class Set079AuxPowerMethod : SynchronousMethod
@@ -18,7 +17,7 @@ public class Set079AuxPowerMethod : SynchronousMethod
 
     public override void Execute()
     {
-        List<Player> pls = Args.GetPlayers("players");
+        var pls = Args.GetPlayers("players");
         int exp = Args.GetInt("exp");
         foreach(Player p in pls)
         {

@@ -17,7 +17,7 @@ public class CleanupRagdollsMethod : SynchronousMethod
     [
         new EnumArgument<RoleTypeId>("roleToRemove")
         {
-            DefaultValue = RoleTypeId.None,
+            DefaultValue = new(RoleTypeId.None, "all"),
             Description = "Do not provide this argument to destroy all ragdolls."
         }
     ];

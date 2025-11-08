@@ -15,11 +15,11 @@ public class SetRoleMethod : SynchronousMethod
         new EnumArgument<RoleTypeId>("newRole"),
         new EnumArgument<RoleSpawnFlags>("spawnFlags")
         {
-            DefaultValue = RoleSpawnFlags.All
+            DefaultValue = new(RoleSpawnFlags.All, null)
         },
         new EnumArgument<RoleChangeReason>("reason")
         {
-            DefaultValue = RoleChangeReason.RemoteAdmin
+            DefaultValue = new(RoleChangeReason.RemoteAdmin, null)
         }
     ];
 

@@ -14,7 +14,7 @@ public class LockDoorMethod : SynchronousMethod
         new DoorsArgument("doors"),
         new EnumArgument<DoorLockReason>("lock")
         {
-            DefaultValue = DoorLockReason.AdminCommand
+            DefaultValue = new(DoorLockReason.AdminCommand, null)
         }
     ];
     

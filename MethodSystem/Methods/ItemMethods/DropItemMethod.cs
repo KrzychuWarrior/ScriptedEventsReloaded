@@ -16,7 +16,7 @@ public class DropItemMethod : SynchronousMethod
         new EnumArgument<ItemType>("itemTypeToDrop"),
         new IntArgument("amountToDrop", 1)
         {
-            DefaultValue = 1
+            DefaultValue = new(1, null)
         }
     ];
     

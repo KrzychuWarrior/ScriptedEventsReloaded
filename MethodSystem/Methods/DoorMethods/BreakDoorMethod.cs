@@ -19,7 +19,7 @@ internal class BreakDoorMethod : SynchronousMethod
         },
         new EnumArgument<DoorDamageType>("damage type")
         {
-            DefaultValue = DoorDamageType.ServerCommand,
+            DefaultValue = new(DoorDamageType.ServerCommand, null),
             Description = "Type of damage to be applied on doors"
         }
     ];

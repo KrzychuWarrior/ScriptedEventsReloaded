@@ -1,6 +1,4 @@
 ﻿using System.Linq;
-using System.Collections.Generic;
-using LabApi.Features.Wrappers;
 using SER.ArgumentSystem.Arguments;
 using SER.ArgumentSystem.BaseArguments;
 using SER.MethodSystem.BaseMethods;
@@ -22,7 +20,7 @@ public class SetInfoAreaMethod : SynchronousMethod
 
     public override void Execute()
     {
-        List<Player> players = Args.GetPlayers("players");
+        var players = Args.GetPlayers("players");
         PlayerInfoArea info = Args.GetRemainingArguments<object, EnumArgument<PlayerInfoArea>>("info area")
             .Cast<PlayerInfoArea>()
             .Aggregate(PlayerInfoArea.Nickname, (a, b) => a | b);

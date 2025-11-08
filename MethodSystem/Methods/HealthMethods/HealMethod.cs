@@ -13,7 +13,7 @@ public class HealMethod : SynchronousMethod
         new PlayersArgument("players to heal"),
         new FloatArgument("amount", 0)
         {
-            DefaultValue = float.MaxValue,
+            DefaultValue = new(float.MaxValue, "max amount"),
             Description = "If this argument is not provided, all players will be fully healed."
         }  
     ];

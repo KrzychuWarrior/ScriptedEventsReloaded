@@ -14,7 +14,7 @@ public class DestroyItemMethod : SynchronousMethod
         new EnumArgument<ItemType>("item"),
         new IntArgument("amount", 1)
         {
-            DefaultValue = 1
+            DefaultValue = new(1, null)
         }
     ];
 

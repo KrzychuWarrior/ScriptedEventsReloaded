@@ -12,19 +12,19 @@ public class RunScriptMethod : SynchronousMethod
 
     public override Argument[] ExpectedArguments { get; } =
     [
-        new ScriptArgument("script"),
-        new VariableArgument("variablesToPass")
+        new CreatedScriptArgument("script to create"),
+        new VariableArgument("variables to pass")
         {
             ConsumesRemainingValues = true,
-            DefaultValue = new List<Variable>(),
+            DefaultValue = new(new List<Variable>(), "none"),
             Description = "Passes an exact copy of the provided variables to the script."
         }
     ];
     
     public override void Execute()
     {
-        var script = Args.GetScript("script");
-        var variables = Args.GetRemainingArguments<Variable, VariableArgument>("variablesToPass");
+        var script = Args.GetCreatedScript("script to create");
+        var variables = Args.GetRemainingArguments<Variable, VariableArgument>("variables to pass");
         
         script.AddVariables(variables);
         script.Run();

@@ -1,4 +1,5 @@
-﻿using SER.ArgumentSystem.Arguments;
+﻿using System.Linq;
+using SER.ArgumentSystem.Arguments;
 using SER.ArgumentSystem.BaseArguments;
 using SER.Helpers.Extensions;
 using SER.MethodSystem.BaseMethods;
@@ -19,7 +20,7 @@ public class LimitPlayersMethod : ReturningMethod<PlayerValue>
     
     public override void Execute()
     {
-        var players = Args.GetPlayers("players");
+        var players = Args.GetPlayers("players").ToList();
         var limit = Args.GetInt("limit");
 
         while (players.Len > limit && players.Len > 0)

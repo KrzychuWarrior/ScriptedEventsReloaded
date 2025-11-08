@@ -15,13 +15,16 @@ public abstract class VariableToken : BaseToken, IContextableToken
     public abstract char Prefix { get; }
     public abstract string Name { get; protected set; }
     public abstract Type VariableType { get; }
-    
+    public abstract Type ValueType { get; }
+
+    public abstract TryGet<Context> TryGetContext(Script scr);
+
     public TryGet<Variable> TryGetVariable()
     {
         return Script.TryGetVariable<Variable>(this);
     }
-
-    public abstract TryGet<Context> TryGetContext(Script scr);
+    
+    public string RawRepr => $"{Prefix}{Name}";
 }
 
 public abstract class VariableToken<TVariable, TValue> : VariableToken, IValueToken
@@ -31,6 +34,7 @@ public abstract class VariableToken<TVariable, TValue> : VariableToken, IValueTo
     public override string Name { get; protected set; } = null!;
 
     public override Type VariableType => typeof(TVariable);
+    public override Type ValueType => typeof(TValue);
 
     public new TryGet<TVariable> TryGetVariable()
     {

@@ -4,7 +4,6 @@ using System.Linq;
 using CommandSystem;
 using JetBrains.Annotations;
 using RemoteAdmin;
-using SER.FlagSystem.Structures;
 using SER.Helpers.Exceptions;
 using SER.Helpers.Extensions;
 using SER.Helpers.ResultSystem;

@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
-using SER.FlagSystem.Structures;
 using SER.Helpers.Extensions;
 using SER.MethodSystem.Methods.ScriptMethods;
+using SER.ScriptSystem.Structures;
 
 namespace SER.FlagSystem.Flags;
 
@@ -12,7 +12,7 @@ public class OnCustomTriggerFlag : Flag
 {
     private string _trigger = null!;
     
-    public static readonly Dictionary<string, List<string>> ScriptsBoundToTrigger = [];
+    public static readonly Dictionary<string, List<ScriptName>> ScriptsBoundToTrigger = [];
     
     public override string Description =>
         $"Makes a script execute when a trigger with a matching name is fired (done using {nameof(TriggerMethod).Replace("Method", "")} method)";

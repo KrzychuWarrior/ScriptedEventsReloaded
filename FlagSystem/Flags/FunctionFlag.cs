@@ -1,17 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using SER.FlagSystem.Structures;
 using SER.Helpers.Extensions;
 using SER.Helpers.ResultSystem;
 using SER.ScriptSystem;
 using SER.TokenSystem.Tokens;
 using SER.TokenSystem.Tokens.VariableTokens;
+using SER.VariableSystem.Bases;
 
 namespace SER.FlagSystem.Flags;
 
 public class FunctionFlag : Flag
 {
-    private List<VariableToken> _expectedVariables = [];
+    private readonly List<VariableToken> _expectedVarTokens = [];
+    public IReadOnlyCollection<VariableToken> ExpectedVarTokens => _expectedVarTokens;
     
     public override string Description =>
         "Requires this script to be executed only when required arguments are supplied.";
@@ -37,22 +39,36 @@ public class FunctionFlag : Flag
                     return error;
                 }
                 
-                _expectedVariables.Add(token);
+                _expectedVarTokens.Add(token);
                 return true;
             },
-            true,
             true
         )
     ];
     
     public override Result OnScriptRunning(Script scr)
     {
-        var notIncluded = _expectedVariables.FirstOrDefault(
-            token => scr.Variables.All(variable => variable.Name != token.Name && variable.GetType() != token.VariableType));
+        (VariableToken token, Variable var)[] provided = _expectedVarTokens
+            .Select(token => (token, scr.Variables.FirstOrDefault(var => var.Name == token.Name)))
+            .OfType<(VariableToken, Variable)>()
+            .ToArray();
 
-        if (notIncluded is not null)
+        var missingVariable = _expectedVarTokens
+            .FirstOrDefault(token => !provided.Select(r => r.token).Contains(token));
+        
+        if (missingVariable is not null)
         {
-            return $"{notIncluded.VariableType.FriendlyTypeName()} '{notIncluded.Name}' was not provided to the script.";
+            return $"Variable '{missingVariable.Name}' was not provided to the script.";
+        }
+
+        (VariableToken, Type) mismatchedTypeVar = provided
+            .Select(x => (x.token, x.var.GetType()))
+            .FirstOrDefault(x => x.token.VariableType != x.Item2);
+
+        if (mismatchedTypeVar is { Item1: {} varToken, Item2: {} type })
+        {
+            return $"Variable '{varToken.Name}' is not of the correct type. " +
+                   $"Expected '{type.FriendlyTypeName()}', got '{varToken.ValueType.FriendlyTypeName()}'.";
         }
         
         return true;
@@ -60,6 +76,6 @@ public class FunctionFlag : Flag
 
     public override void Unbind()
     {
-        _expectedVariables.Clear();
+        _expectedVarTokens.Clear();
     }
 }

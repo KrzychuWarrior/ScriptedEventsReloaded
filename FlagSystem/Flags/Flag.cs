@@ -6,8 +6,9 @@ using LabApi.Features.Console;
 using SER.Helpers.Extensions;
 using SER.Helpers.ResultSystem;
 using SER.ScriptSystem;
+using SER.ScriptSystem.Structures;
 
-namespace SER.FlagSystem.Structures;
+namespace SER.FlagSystem.Flags;
 
 public abstract class Flag
 {
@@ -17,10 +18,8 @@ public abstract class Flag
         string Name, 
         string Description, 
         Func<string[], Result> Handler, 
-        bool IsRequired, 
-        bool Multiple = false
-    )
-    {
+        bool IsRequired
+    ) {
         public Result AddArgument(string[] values) => Handler(values);
     }
 
@@ -36,7 +35,10 @@ public abstract class Flag
     
     public virtual Result OnScriptRunning(Script scr) => true;
 
-    protected string ScriptName { get; set; } = null!;
+    // when this fucker is set to null, it still compiles but the plugin will just fucking explode
+    // even better, the errors will be pointing to a random line in some child class
+    // https://tenor.com/view/alucore-gif-21193899
+    protected ScriptName ScriptName { get; set; } = default;
 
     public string Name { get; set; } = null!;
     
@@ -63,7 +65,7 @@ public abstract class Flag
             .ToDictionary(t => t.Name.Replace("Flag", ""), t => t);
     }
 
-    public static TryGet<Flag> TryGet(string flagName, string scriptName)
+    public static TryGet<Flag> TryGet(string flagName, ScriptName scriptName) 
     {
         if (!FlagInfos.TryGetValue(flagName, out var type))
         {
@@ -71,6 +73,7 @@ public abstract class Flag
         }
         
         var flag = type.CreateInstance<Flag>();
+
         flag.ScriptName = scriptName;
         flag.Name = flagName;
         return flag;

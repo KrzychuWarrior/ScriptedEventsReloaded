@@ -1,10 +1,12 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using LabApi.Features.Console;
 using LabApi.Loader.Features.Paths;
 using SER.Examples;
 using SER.FlagSystem;
+using SER.Helpers;
 using SER.Helpers.Extensions;
 using SER.ScriptSystem;
 using SER.ScriptSystem.Structures;
@@ -51,22 +53,29 @@ public static class FileSystem
             Directory.CreateDirectory(DirPath);
             return;
         }
-        
+
         UpdateScriptPathCollection();
         ScriptFlagHandler.Clear();
         
         foreach (var scriptPath in RegisteredScriptPaths)
         {
-            var scriptName = Path.GetFileNameWithoutExtension(scriptPath);
+            var scriptName = ScriptName.InitUnchecked(Path.GetFileNameWithoutExtension(scriptPath));
 
             var lines = Script.CreateByVerifiedPath(scriptPath, ServerConsoleExecutor.Instance).GetFlagLines();
             if (lines.IsEmpty())
             {
                 continue;
             }
-            
+
             ScriptFlagHandler.RegisterScript(lines, scriptName);
         }
+
+    }
+    
+    public static string GetScriptPath(ScriptName scriptName)
+    {
+        UpdateScriptPathCollection();
+        return RegisteredScriptPaths.First(p => Path.GetFileNameWithoutExtension(p) == scriptName.Value);
     }
     
     public static bool DoesScriptExist(string scriptName, out string path)

@@ -26,7 +26,7 @@ public class MethodCommand : ICommand, IUsePermissions
 
         var script = new Script
         {
-            Name = "Command",
+            Name = ScriptName.InitUnchecked("Command"),
             Content = string.Join(" ", arguments.ToArray()),
             Executor = ScriptExecutor.Get(sender)
         };

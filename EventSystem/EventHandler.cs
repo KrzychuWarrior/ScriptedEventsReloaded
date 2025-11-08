@@ -23,7 +23,7 @@ namespace SER.EventSystem;
 public static class EventHandler
 {
     private static readonly Dictionary<string, Action> UnsubscribeActions = [];
-    private static readonly Dictionary<string, List<string>> ScriptsUsingEvent = [];
+    private static readonly Dictionary<string, List<ScriptName>> ScriptsUsingEvent = [];
     private static readonly HashSet<string> DisabledEvents = [];
     public static List<EventInfo> AvailableEvents = [];
     
@@ -44,7 +44,7 @@ public static class EventHandler
         DisabledEvents.Clear();
     }
 
-    internal static void DisableEvent(string evName, string scriptName)
+    internal static void DisableEvent(string evName, ScriptName scriptName)
     {
         DisabledEvents.Add(evName);
         ConnectEvent(evName, scriptName, false);
@@ -59,7 +59,7 @@ public static class EventHandler
         }
     }
     
-    internal static Result ConnectEvent(string evName, string scriptName, bool allowNonArg = true) 
+    internal static Result ConnectEvent(string evName, ScriptName scriptName, bool allowNonArg = true) 
     {
         if (ScriptsUsingEvent.TryGetValue(evName, out var scriptsConnected))
         {
@@ -144,7 +144,7 @@ public static class EventHandler
             Result rs = $"Failed to run script '{scrName}' connected to event '{evName}'";
             if (Script.CreateByScriptName(scrName, ScriptExecutor.Get()).HasErrored(out var error, out var script))
             {
-                Log.Error(scrName, rs + error);
+                Log.CompileError(scrName, rs + error);
                 continue;
             }
 
@@ -176,7 +176,7 @@ public static class EventHandler
             Log.Debug($"Running script '{scrName}' for event '{evName}'");
             if (Script.CreateByScriptName(scrName, ScriptExecutor.Get()).HasErrored(out var error, out var script))
             {
-                Log.Error(scrName, rs + error);
+                Log.CompileError(scrName, rs + error);
                 continue;
             }
 

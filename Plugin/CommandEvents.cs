@@ -53,7 +53,7 @@ public static class CommandEvents
         
         var script = new Script
         {
-            Name = methodName,
+            Name = ScriptName.InitUnchecked(methodName),
             Content = $"{methodName} {ev.Arguments.JoinStrings(" ")}",
             Executor = ScriptExecutor.Get(ev.Sender, ev.CommandType)
         };

@@ -28,7 +28,7 @@ namespace SER.ScriptSystem;
 
 public class Script
 {
-    public required string Name { get; init; }
+    public required ScriptName Name { get; init; }
     
     public required string Content { get; init; }
     
@@ -58,10 +58,9 @@ public class Script
     
     public bool IsRunning => RunningScripts.Contains(this);
 
-    private static readonly List<Script> _runningScripts = [];
-    public static readonly ReadOnlyCollection<Script> RunningScripts = _runningScripts.AsReadOnly();
-
-
+    private static readonly List<Script> RunningScriptsList = [];
+    public static readonly ReadOnlyCollection<Script> RunningScripts = RunningScriptsList.AsReadOnly();
+    
     private readonly HashSet<Variable> _variables = [];
     public ReadOnlyCollection<Variable> Variables => _variables.ToList().AsReadOnly();
     
@@ -87,39 +86,22 @@ public class Script
     public static TryGet<Script> CreateByScriptName(string dirtyName, ScriptExecutor? executor)
     {
         var name = Path.GetFileNameWithoutExtension(dirtyName);
-        if (!FileSystem.DoesScriptExist(name, out var path))
+        if (ScriptName.TryInit(name).HasErrored(out var initError, out var scriptName))
         {
-            return $"Script '{name}' does not exist in the SER folder or is inaccessible.";
+            return initError;       
         }
 
         return new Script
         {
-            Name = name,
-            Content = File.ReadAllText(path),
-            Executor = executor ?? ScriptExecutor.Get()
-        };
-    }
-    
-    public static TryGet<Script> CreateByPath(string path, ScriptExecutor? executor)
-    {
-        var name = Path.GetFileNameWithoutExtension(path);
-        
-        if (!FileSystem.DoesScriptExist(path))
-        {
-            return $"Script '{name}' does not exist in the SER folder or is inaccessible.";
-        }
-
-        return new Script
-        {
-            Name = name,
-            Content = File.ReadAllText(path),
+            Name = scriptName,
+            Content = File.ReadAllText(FileSystem.GetScriptPath(scriptName)),
             Executor = executor ?? ScriptExecutor.Get()
         };
     }
     
     public static Script CreateByVerifiedPath(string path, ScriptExecutor? executor) => new() 
     {
-        Name =  Path.GetFileNameWithoutExtension(path),
+        Name = ScriptName.InitUnchecked(Path.GetFileNameWithoutExtension(path)),
         Content = File.ReadAllText(path),
         Executor = executor ?? ScriptExecutor.Get()
     };
@@ -178,14 +160,14 @@ public class Script
             return null;
         }
         
-        _runningScripts.Add(this);
+        RunningScriptsList.Add(this);
         _scriptCoroutine = InternalExecute().Run(this, _ => _scriptCoroutine.Kill());
         return _isEventAllowed;
     }
 
     public void Stop(bool silent = false)
     {
-        _runningScripts.Remove(this);
+        RunningScriptsList.Remove(this);
         _scriptCoroutine.Kill();
         if (!silent) Logger.Info($"Script {Name} was stopped");
     }
@@ -281,7 +263,7 @@ public class Script
             }
         }
 
-        _runningScripts.Remove(this);
+        RunningScriptsList.Remove(this);
     }
 
     public TryGet<T> TryGetVariable<T>(VariableToken variable) where T : Variable
